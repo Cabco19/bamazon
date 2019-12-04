@@ -25,6 +25,7 @@ connection.connect(function(err){
     
 });
 
+// Function that runs at the start of the App and retrieves product information from SQL database
 function start() {
     connection.query("SELECT * FROM products", function(err, res) {
         if (err) throw err;
@@ -39,6 +40,7 @@ function start() {
     });
 }
 
+// Function to prompt customer
 function promptCustomer(res) {
     inquirer.prompt({
         name:"itemId",
@@ -67,7 +69,6 @@ function promptCustomer(res) {
                 }
             }).then(function(answer){
                 if((res[id].stock_quantity-answer.quantity)>0){
-                    console.log("Amt avail: " +res[id].stock_quantity);
                     console.log("Item to purchase: " +productName);
                     var total = res[id].price*answer.quantity;
                     console.log("Your order was successfully placed!");
@@ -78,8 +79,6 @@ function promptCustomer(res) {
                 }
             })
         }
-
-
     }
 })
 }
