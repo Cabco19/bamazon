@@ -32,22 +32,78 @@ function promptManger(){
         message: "Choose an operation",
         choices: ["View Products for Sale", "View Low Inventory", "Add to Inventory", "Add New Product"]
     }).then(function(answer){
-        console.log(answer);
+        if (answer.managerPrompt == "View Products for Sale"){
+            viewProducts();
+        }
+        if (answer.managerPrompt == "View Low Inventory"){
+            viewLowInventory();
+        }
+        if (answer.managerPrompt == "Add to Inventory"){
+            addToInventory();
+        }
     })
 }
-function start() {
+
+function viewProducts() {
     connection.query("SELECT * FROM products", function(err, res) {
         if (err) throw err;
+        console.log(res);
         console.log("\n----------------------------------------------------------------------");
-        console.log("\nManager Functionality\n------------------------------------------------------------");
+        console.log("\nManager Functionality\n" +"***Viewing All Products for Sale***\n------------------------------------------------------------");
         for (var i = 0; i < res.length; i++) {            
             console.log("Product ID: " + res[i].item_id + " | " + res[i].product_name + " | " + res[i].department_name + " | " + "$"+res[i].price + " | " + res[i].stock_quantity);
         }
         console.log("------------------------------------------------------------");
+            
+        // connection.end();
+    });
+}
+function viewLowInventory() {
+    connection.query("SELECT * FROM products WHERE stock_quantity <= 5", function(err, res) {
+        if (err) throw err;
+        console.log(res);
+        console.log("\n----------------------------------------------------------------------");
+        console.log("\nManager Functionality\n" +"***Viewing Low Inventory***\n------------------------------------------------------------");
+        if (res) {
+            for (var i = 0; i < res.length; i++) {            
+                console.log("Product ID: " + res[i].item_id + " | " + res[i].product_name + " | " + res[i].department_name + " | " + "$"+res[i].price + " | " + res[i].stock_quantity);
+            }     
+        }
+        // console.log("No low inventory to show. All products have more than 5 units each.");              
+        console.log("------------------------------------------------------------");
+        // connection.end();
+    });
+}
+
+function addToInventory() {
+    connection.query("SELECT * FROM products", function(err, res) {
+        if (err) throw err;
+        console.log("\n----------------------------------------------------------------------");
+        console.log("\nManager Functionality\n" +"***Adding to Inventory***\n------------------------------------------------------------");
+        if (res) {
+            for (var i = 0; i < res.length; i++) {            
+                console.log("Product ID: " + res[i].item_id + " | " + res[i].product_name + " | " + res[i].department_name + " | " + "$"+res[i].price + " | " + res[i].stock_quantity);
+            }     
+        }
+        console.log("------------------------------------------------------------");
+
+        inquirer.prompt([
+            {     
+            type: "input",
+            name: "productId",
+            message: "Enter the Product ID of the item you'd like to update"
+            },
+            {
+            type: "input",
+            name: "updateInventory",
+            message: "Enter the amount of units you'd like to update for this product"
+            }
+        ]).then(function(answer){ 
+            connection.query("UPDATE PRODUCTS SET stock_quantity = stock_quantity +"+answer.updateInventory+" WHERE item_id ="+answer.productId, function(err, res2) {
+                console.log("Product ID #" +answer.productId+" has succesfully been updated with " +answer.updateInventory + " more unit(s).");
+            })
+        });
         
-
-
-        // promptCustomer(res);
         // connection.end();
     });
 }
