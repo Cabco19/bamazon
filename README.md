@@ -8,10 +8,12 @@ The Bamazon App allows the user to purchase an item from the products displayed.
 
 ## Built using Node.js and MySql:
 
-To display the products that are avialable on Bmaazon the product data is retrieved by connecting to the Bamazon SQL databse.  
+To display the products that are available on Bmaazon, the product data is retrieved by connecting to the Bamazon SQL database.  
 
-### User Controls -  
+### Customer User Controls   
 
-   * `![alt Customer Screenshot](screenshots/BamazonCustomer_screenshot.png)  
+   * ![alt Customer Screenshot](screenshots/BamazonCustomer_screenshot.png)  
+
+### Manager User Controls  
 
 
