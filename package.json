@@ -1,0 +1,26 @@
+{
+  "name": "bamazon",
+  "version": "1.0.0",
+  "description": "Bamazon is a CLI App designed to allow a customer to purchase products from the Bamazon Store. When the bamazonCustomer.js file is run in Node, all available products are displayed on the screen and the customer can purchase an item.",
+  "main": "bamazonCustomer.js",
+  "dependencies": {
+    "dotenv": "^8.2.0",
+    "mysql": "^2.17.1",
+    "inquirer": "^7.0.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Cabco19/bamazon.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Cabco19/bamazon/issues"
+  },
+  "homepage": "https://github.com/Cabco19/bamazon#readme"
+}

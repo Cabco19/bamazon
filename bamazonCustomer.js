@@ -1,5 +1,8 @@
+require("dotenv").config();
 var mysql = require("mysql");
 var inquirer = require("inquirer");
+var pwrd = process.env.PASSWORD;
+
 
 // Create mysql connection
 var connection = mysql.createConnection({
@@ -12,7 +15,7 @@ var connection = mysql.createConnection({
     user: "root",
 
     // My Password
-    password: "DewT%@!!9",
+    password: pwrd,
     database: "bamazon"
 });
 

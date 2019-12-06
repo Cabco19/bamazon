@@ -1,5 +1,7 @@
+require("dotenv").config();
 var mysql = require("mysql");
 var inquirer = require("inquirer");
+var pwrd = process.env.PASSWORD;
 
 // Create mysql connection
 var connection = mysql.createConnection({
@@ -12,7 +14,7 @@ var connection = mysql.createConnection({
     user: "root",
 
     // My Password
-    password: "DewT%@!!9",
+    password: pwrd,
     database: "bamazon"
 });
 
@@ -47,31 +49,35 @@ function promptManger(){
 function viewProducts() {
     connection.query("SELECT * FROM products", function(err, res) {
         if (err) throw err;
-        console.log(res);
         console.log("\n----------------------------------------------------------------------");
         console.log("\nManager Functionality\n" +"***Viewing All Products for Sale***\n------------------------------------------------------------");
         for (var i = 0; i < res.length; i++) {            
             console.log("Product ID: " + res[i].item_id + " | " + res[i].product_name + " | " + res[i].department_name + " | " + "$"+res[i].price + " | " + res[i].stock_quantity);
         }
-        console.log("------------------------------------------------------------");
-            
+        console.log("------------------------------------------------------------\n");
+        promptManger();
         // connection.end();
     });
 }
 function viewLowInventory() {
     connection.query("SELECT * FROM products WHERE stock_quantity <= 5", function(err, res) {
         if (err) throw err;
-        console.log(res);
         console.log("\n----------------------------------------------------------------------");
-        console.log("\nManager Functionality\n" +"***Viewing Low Inventory***\n------------------------------------------------------------");
+        console.log("Manager Functionality\n\n" +"***Viewing Low Inventory***");
+        if (!res.length){
+            console.log("All products have inventory above 5 units.\nYour inventory is up to date!");    
+            // promptManger();
+        }
         if (res) {
             for (var i = 0; i < res.length; i++) {            
                 console.log("Product ID: " + res[i].item_id + " | " + res[i].product_name + " | " + res[i].department_name + " | " + "$"+res[i].price + " | " + res[i].stock_quantity);
-            }     
+            }    
+            // promptManger();
         }
         // console.log("No low inventory to show. All products have more than 5 units each.");              
-        console.log("------------------------------------------------------------");
+        console.log("----------------------------------------------------------------------\n\n");
         // connection.end();
+        promptManger();
     });
 }
 
@@ -101,9 +107,12 @@ function addToInventory() {
         ]).then(function(answer){ 
             connection.query("UPDATE PRODUCTS SET stock_quantity = stock_quantity +"+answer.updateInventory+" WHERE item_id ="+answer.productId, function(err, res2) {
                 console.log("Product ID #" +answer.productId+" has succesfully been updated with " +answer.updateInventory + " more unit(s).");
+                console.log("\n");
+                promptManger();
             })
         });
-        
+        // 
         // connection.end();
     });
+    
 }
