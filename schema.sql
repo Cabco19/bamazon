@@ -1,5 +1,6 @@
 CREATE DATABASE bamazon;
 
+USE bamazon;
 
 CREATE TABLE products(
 		item_id integer not null auto_increment,
@@ -9,6 +10,6 @@ CREATE TABLE products(
         stock_quantity integer(8) not null,
         primary key (item_id)
 );
-use bamazon;
-insert into products (product_name,department_name,price,stock_quantity)
+
+INSERT INTO products (product_name,department_name,price,stock_quantity)
 values ("Star Wars Legos","Games and Toys",40,70);
