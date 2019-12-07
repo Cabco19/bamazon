@@ -48,7 +48,7 @@ function promptCustomer(res) {
     inquirer.prompt({
         name:"itemId",
         type:"input",
-        message:"What is the Product ID of the item you would like to purchase today?"
+        message:"What product are you interesting in puchasing today? Please provide the corresponding Product ID."
     }
 ).then(function(answer){
     // var correct = false;
@@ -58,11 +58,13 @@ function promptCustomer(res) {
             var id=i;
             var productId = res[i].item_id;
             var productName = res[i].product_name;
-            console.log("Product Search: " + productName);
+            var curInventory = res[i].stock_quantity;
+            console.log("Product Search: " + productName+"\n");
+            if (curInventory > 0) {
             inquirer.prompt({
                 name:"quantity",
                 type:"input",
-                message:"How many units would you like to purchase for this item?",
+                message:"How many "+productName+"(s) would you like to purchase?",
                 validate: function(value){
                     if(isNaN(value)==false){
                         return true;
@@ -71,8 +73,9 @@ function promptCustomer(res) {
                     }
                 }
             }).then(function(answer){
-                if((res[id].stock_quantity-answer.quantity)>0){
-                    console.log("Item to purchase: " +productName);
+                var currentInventory = res[id].stock_quantity;
+                if((currentInventory-answer.quantity)>=0 && currentInventory >0){
+                    console.log("Item to purchase: " +productName+"\n");
                     var total = res[id].price*answer.quantity;
                     console.log("Your order was successfully placed!");
                     connection.query("UPDATE products SET stock_quantity='"+(res[id].stock_quantity-answer.quantity)+"' WHERE item_id='"+productId+"'", function(err,res2){
@@ -82,6 +85,15 @@ function promptCustomer(res) {
                 }
             })
         }
-    }
+        else {
+            console.log("Unfortunately, this product is out of stock at the moment.\nPlease select another item or check back for updated inventory!");
+            start();
+
+        }
+        }
+        
+        }
+
+        
 })
 }

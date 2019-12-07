@@ -31,7 +31,7 @@ function promptManger(){
     inquirer.prompt({        
         type: "list",
         name: "managerPrompt",
-        message: "Choose an operation",
+        message: "Choose an operation to perform",
         choices: ["View Products for Sale", "View Low Inventory", "Add to Inventory", "Add New Product"]
     }).then(function(answer){
         if (answer.managerPrompt == "View Products for Sale"){
@@ -42,6 +42,9 @@ function promptManger(){
         }
         if (answer.managerPrompt == "Add to Inventory"){
             addToInventory();
+        }
+        if (answer.managerPrompt == "Add New Product"){
+            addNewProduct();
         }
     })
 }
@@ -111,8 +114,47 @@ function addToInventory() {
                 promptManger();
             })
         });
-        // 
-        // connection.end();
+    });    
+}
+
+function addNewProduct() {
+    console.log("\n----------------------------------------------------------------------");
+    console.log("\nManager Functionality\n" +"***Adding New Products to Inventory***\n------------------------------------------------------------");
+    inquirer.prompt([
+        {     
+        type: "input",
+        name: "name",
+        message: "Enter the new Product Name you would like to add:"
+        },
+        {
+        type: "list",
+        name: "dept",
+        message: "Choose the category for this product:",
+        choices: ["Shoes", "Clothing", "Electronics", "Game and Toys"]
+        },
+        {
+        type: "input",
+        name: "price",
+        message: "Enter the cost for this product:"
+        },
+        {
+        type: "input",
+        name: "quantity",
+        message: "Enter the stock quatity:"
+        }
+    ]).then(function(answer){ 
+        console.log(answer);
+        connection.query("INSERT INTO products SET ?", {
+            product_name:answer.name,
+            department_name:answer.dept,
+            price:answer.price,
+            stock_quantity:answer.quantity
+        }, function(err, res2) {
+            console.log("New product added successfully: " +answer.name);
+            console.log("\n");
+            promptManger();
+        })
     });
-    
+
+
 }
